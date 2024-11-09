@@ -1,0 +1,40 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 20px;
+}
+.content_changePanel{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.content_changePanel_btns{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.content_changePanel_btns_item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.content_calcMenu{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.content_calcMenu_item{
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+
+}
+.content_calcMenu_item_block{
+    display: flex;
+    width: 200px;
+    gap: 10px;
+}
+.content_calcMenu_item_block_input{
+    width: 100px;
+}
