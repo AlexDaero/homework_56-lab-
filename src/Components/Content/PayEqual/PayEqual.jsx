@@ -10,16 +10,21 @@ function PayEqual() {
     const tipsRef = useRef(null)
     const deliveryRef = useRef(null)
     const sumCount = () => {
-        const orderSum = Number(orderSumRef.current.value) + (orderSumRef.current.value * (tipsRef.current.value / 100))
-        const copyState = { ...result }
-        copyState.totalSum = orderSum
-        copyState.people = peopleInputRef.current.value
-        if (deliveryRef.current.value > 0) {
-            copyState.individPay = orderSum + deliveryRef.current.value / peopleInputRef.current.value
-        } else {
-            copyState.individPay = orderSum / peopleInputRef.current.value
+        if (orderSumRef.current.value.length > 0 && peopleInputRef.current.value.length > 0) {
+            const orderSum = Number(orderSumRef.current.value) + (orderSumRef.current.value * (tipsRef.current.value / 100))
+            const copyState = { ...result }
+            copyState.people = peopleInputRef.current.value
+            if (deliveryRef.current.value > 0) {
+                copyState.totalSum = orderSum + Number(deliveryRef.current.value)
+                copyState.individPay = Math.ceil((Number(orderSum) + Number(deliveryRef.current.value)) / Number(peopleInputRef.current.value))
+            } else {
+                copyState.totalSum = orderSum
+                copyState.individPay = Math.ceil(orderSum / Number(peopleInputRef.current.value))
+            }
+            setResult(copyState)
+        } else{
+            alert('Введите количество человек и сумму заказа')
         }
-        setResult(copyState)
     }
     return (
         <>
