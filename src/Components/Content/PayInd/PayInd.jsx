@@ -31,7 +31,7 @@ function PayInd() {
         if (type === 'name') {
             copyState[index].name = value
         } else if (type === 'price') {
-            copyState[index].price = value
+            copyState[index].price = Number(value)
         }
         setListPayer(copyState)
     }
@@ -41,22 +41,40 @@ function PayInd() {
             const copyState = structuredClone(listPayer)
             const copyTotal = { ...totalOrder }
 
-            const sum = listPayer.reduce((accum, current) => Number(accum.price) + Number(current.price))
+            let deliverySum = 0
+            let tipsSum = 0
 
-            const deliverySum = Number(deliveryRef.current.value) / (Number(copyState.length))
-            const totalSum = sum + (sum * (Number(tipsRef.current.value) / 100)) + Number(deliveryRef.current.value)
+            if (Number(deliveryRef.current.value) > 0) {
+                deliverySum = Number(deliveryRef.current.value)
+            } else if (deliveryRef.current.value.length > 0) {
+                alert('Некорректный ввод!')
+                return
+            }
+
+            if (Number(tipsRef.current.value) > 0) {
+                tipsSum = Number(tipsRef.current.value)
+            } else if (tipsRef.current.value.length > 0) {
+                alert('Некорректный ввод!')
+                return
+            }
+
+            const totalOrderSum = listPayer.reduce((acc, current) => acc + current.price, 0)
+
+            const deliveryIndSum = deliverySum / (Number(copyState.length))
+            const totalSum = totalOrderSum + (totalOrderSum * (tipsSum / 100)) + deliverySum
             copyTotal.value = totalSum
 
             for (let i = 0; i < copyState.length; i++) {
                 copyState[i].price =
                     Math.ceil(Number(copyState[i].price)
-                        + (Number(copyState[i].price) * (Number(tipsRef.current.value) / 100))
-                        + deliverySum)
+                        + (Number(copyState[i].price) * (tipsSum / 100))
+                        + deliveryIndSum)
             }
 
             setTotalOrder(copyTotal)
             setResult(copyState)
             setShowResult(true)
+
             return
         }
         alert('Некорректный ввод!')

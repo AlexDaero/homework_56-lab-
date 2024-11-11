@@ -5,26 +5,42 @@ import './PayEqual.css'
 
 function PayEqual() {
     const [result, setResult] = useState({ totalSum: 0, people: 0, individPay: 0 })
+    const [showResult, setShowResult] = useState(false)
     const peopleInputRef = useRef(null)
     const orderSumRef = useRef(null)
     const tipsRef = useRef(null)
     const deliveryRef = useRef(null)
     const sumCount = () => {
-        if (orderSumRef.current.value.length > 0 && peopleInputRef.current.value.length > 0) {
-            const orderSum = Number(orderSumRef.current.value) + (orderSumRef.current.value * (tipsRef.current.value / 100))
+        if (Number(orderSumRef.current.value) > 0 && Number(peopleInputRef.current.value) > 0) {
             const copyState = { ...result }
-            copyState.people = peopleInputRef.current.value
-            if (deliveryRef.current.value > 0) {
-                copyState.totalSum = orderSum + Number(deliveryRef.current.value)
-                copyState.individPay = Math.ceil((Number(orderSum) + Number(deliveryRef.current.value)) / Number(peopleInputRef.current.value))
-            } else {
-                copyState.totalSum = orderSum
-                copyState.individPay = Math.ceil(orderSum / Number(peopleInputRef.current.value))
+            let deliverySum = 0
+            let tipsSum = 0
+
+            if (Number(deliveryRef.current.value) > 0) {
+                deliverySum = Number(deliveryRef.current.value)
+            } else if(deliveryRef.current.value.length > 0) {
+                alert('Некорректный ввод!')
+                return
             }
+
+            if (Number(tipsRef.current.value) > 0) {
+                tipsSum = Number(tipsRef.current.value)
+            } else if(tipsRef.current.value.length > 0) {
+                alert('Некорректный ввод!')
+                return
+            }
+
+            const orderSum = Number(orderSumRef.current.value) + (orderSumRef.current.value * (tipsSum / 100))
+            copyState.people = peopleInputRef.current.value
+            copyState.totalSum = orderSum + deliverySum
+            copyState.individPay = Math.ceil((Number(orderSum) + deliverySum) / Number(peopleInputRef.current.value))
+
             setResult(copyState)
-        } else{
-            alert('Введите количество человек и сумму заказа')
+            setShowResult(true)
+
+            return
         }
+        alert('Некорректный ввод!')
     }
     return (
         <>
@@ -85,11 +101,15 @@ function PayEqual() {
                 bgColor='orange'
                 click={sumCount}
             />
-            <div>
-                <p>Общая сумма {result.totalSum}</p>
-                <p>Число людей: {result.people}</p>
-                <p>Каждый платит: {result.individPay}</p>
-            </div>
+            {
+                showResult
+                    ? <div>
+                        <p>Общая сумма {result.totalSum}</p>
+                        <p>Число людей: {result.people}</p>
+                        <p>Каждый платит: {result.individPay}</p>
+                    </div>
+                    : null
+            }
         </>
     )
 }
