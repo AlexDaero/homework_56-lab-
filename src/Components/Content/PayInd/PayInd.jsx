@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { cloneElement, useEffect, useRef, useState } from "react";
 import Button from "../../UI/Button";
 import './PayInd.css'
 
 
 function PayInd() {
-    // const inputRefs = useRef([])
     const [listPayer, setListPayer] = useState([{ name: '', price: '' }])
     const [result, setResult] = useState([])
     const [showResult, setShowResult] = useState(true)
@@ -39,7 +38,7 @@ function PayInd() {
 
     const sumCount = () => {
         if (isNaN(listPayer[0].name) && Number(listPayer[0].price) > 0) {
-            const copyState = [...listPayer]
+            const copyState = structuredClone(listPayer)
             const copyTotal = { ...totalOrder }
             let sum = 0
 
@@ -72,7 +71,6 @@ function PayInd() {
                 return (
                     <div className="payer_info" key={index}>
                         <input
-                            // ref={(element) => inputRefs.current[index + 'name'] = element}
                             value={listPayer[index].name}
                             onChange={(e) => updateMember(index, e.target.value, 'name')}
                             className="payer_info_name"
@@ -80,7 +78,6 @@ function PayInd() {
                         />
                         <div className="payer_info_price">
                             <input
-                                // ref={(element) => inputRefs.current[index + 'price'] = element}
                                 value={listPayer[index].price}
                                 onChange={(e) => updateMember(index, e.target.value, 'price')}
                                 className="payer_info_price_item"
@@ -137,7 +134,7 @@ function PayInd() {
                         {result.map((item, index) => {
                             return (
                                 <p key={index + item}>
-                                    {result[index].name}: {result[index].price} RUB
+                                    {item.name}: {item.price} RUB
                                 </p>
                             )
                         })}
