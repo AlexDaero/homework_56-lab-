@@ -40,11 +40,8 @@ function PayInd() {
         if (isNaN(listPayer[0].name) && Number(listPayer[0].price) > 0) {
             const copyState = structuredClone(listPayer)
             const copyTotal = { ...totalOrder }
-            let sum = 0
 
-            listPayer.reduce((accum, current) => {
-                sum += Number(current.price)
-            }, 0)
+            const sum = listPayer.reduce((accum, current) => Number(accum.price) + Number(current.price))
 
             const deliverySum = Number(deliveryRef.current.value) / (Number(copyState.length))
             const totalSum = sum + (sum * (Number(tipsRef.current.value) / 100)) + Number(deliveryRef.current.value)
@@ -130,7 +127,7 @@ function PayInd() {
             {
                 showResult
                     ? <div>
-                        <p>Общая сумма: {totalOrder.value}</p>
+                        <p>Общая сумма: {totalOrder.value} RUB</p>
                         {result.map((item, index) => {
                             return (
                                 <p key={index + item}>

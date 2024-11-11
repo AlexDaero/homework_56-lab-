@@ -5,19 +5,11 @@ import PayEqual from './PayEqual/PayEqual'
 import PayInd from "./PayInd/PayInd";
 
 function Content() {
-    const [calcOption, setCalcOption] = useState(false)
+    const [calcOption, setCalcOption] = useState(true)
 
     const toggleCalc = (item) => {
         if (item === 'equal') return setCalcOption(true)
         setCalcOption(false)
-    }
-
-    const paymentIndividual = () => {
-        return (
-            <>
-                kek
-            </>
-        )
     }
 
     return (
